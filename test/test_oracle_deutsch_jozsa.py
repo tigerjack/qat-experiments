@@ -5,7 +5,7 @@ from qat.external.utils.qroutines.qregs_init import initialize_qureg_given_int
 from qat.lang.AQASM import Program
 from qat.qpus import PyLinalg
 
-from algorithms.oracles.deutsch_jozsa_oracles import BalancedOracle
+from oracles.deutsch_jozsa_oracles import BalancedOracle
 
 
 class OracleDeutschJozsaTest(unittest.TestCase):

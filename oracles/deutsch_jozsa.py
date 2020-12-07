@@ -1,5 +1,6 @@
-from algorithms.oracles.general import Oracle
-from qat.lang.AQASM import QRoutine, X, CNOT
+from qat.lang.AQASM import CNOT, QRoutine, X
+
+from oracles.general import Oracle
 
 
 class ConstantOracle(Oracle):
@@ -8,7 +9,7 @@ class ConstantOracle(Oracle):
         # + 1 for the output
         _ = qrout.new_wires(self.nqubits)
         qout = qrout.new_wires(1)
-        if 'output' in kwargs and kwargs['output'] == 1:
+        if "output" in kwargs and kwargs["output"] == 1:
             qrout.apply(X, qout)
         return qrout
 
@@ -22,3 +23,5 @@ class BalancedOracle(Oracle):
         for qb in qreg:
             qrout.apply(CNOT, qb, qout)
         return qrout
+
+
