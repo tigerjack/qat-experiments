@@ -1,9 +1,11 @@
-from qat.lang.AQASM import CNOT, QRoutine, X
+from qat.lang.AQASM.gates import CNOT, X
+from qat.lang.AQASM.routines import QRoutine
 
 from oracles.general import Oracle
 
 
 class ConstantOracle(Oracle):
+
     def generate(self, **kwargs):
         qrout = QRoutine()
         # + 1 for the output
@@ -15,6 +17,7 @@ class ConstantOracle(Oracle):
 
 
 class BalancedOracle(Oracle):
+
     def generate(self, **kwargs):
         qrout = QRoutine()
         # + 1 for the output
@@ -23,5 +26,3 @@ class BalancedOracle(Oracle):
         for qb in qreg:
             qrout.apply(CNOT, qb, qout)
         return qrout
-
-
