@@ -18,15 +18,16 @@ inputs and 1's for the other half. Our task is to determine whether the given
 function is balanced or constant.
     """
     @classmethod
-    def generate_program(cls, pr: Program, qr: QRegister,
+    def generate_program(cls, nqbits:int, 
                          oracle: Oracle) -> Tuple[Program, QRegister]:
         # Add another qubit for output and put it in state \ket{-}
-        n = len(qr)
-        iters = ceil(pi / (4 * asin(1 / sqrt(2**n))) - 1 / 2)
+        pr = Program()
+        qr = pr.qalloc(nqbits)
+        iters = ceil(pi / (4 * asin(1 / sqrt(2**nqbits))) - 1 / 2)
         if iters == 0:
             iters = 1
         print(f"Grover iters: {iters}")
-        qfun_in = cls._input(len(qr))
+        qfun_in = cls._input(nqbits)
         pr.apply(qfun_in, qr)
         for _ in range(iters):
             cls._iter(pr, qr, oracle)

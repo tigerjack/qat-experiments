@@ -16,8 +16,10 @@ function is balanced or constant.
     """
 
     @classmethod
-    def generate_program(cls, pr: Program, qr: QRegister, oracle: Oracle):
+    def generate_program(cls, nqbits:int, oracle: Oracle):
         # Add another qubit for output and put it in state \ket{-}
+        pr = Program()
+        qr = pr.qalloc(nqbits)
         qout = pr.qalloc(1)
         pr.apply(X, qout)
         pr.apply(H, qout)

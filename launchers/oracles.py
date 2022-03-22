@@ -1,18 +1,16 @@
 import argparse
 import random
-# import sys
-from typing import Tuple
 
 from algorithms.bernstein_vazirani import BernsteinVaziraniAlgorithm
 from algorithms.deutsch_jozsa import DeutschJozsaAlgorithm
-from algorithms.grover_algorithm import GroverAlgorithm
-from oracles.bernstein_vazirani import BitwiseProductOracle
-from oracles.deutsch_jozsa import BalancedOracle, ConstantOracle
-from oracles.grover import FixedStringOracle
+from algorithms.grover import GroverAlgorithm
 from qat.core.console import display
-from qat.lang.AQASM.bits import QRegister
-from qat.lang.AQASM.program import Program
 from qat.qpus import PyLinalg
+
+from oracles.bernstein_vazirani import BitwiseProductOracle as BPOra
+from oracles.deutsch_jozsa import BalancedOracle as BOra
+from oracles.deutsch_jozsa import ConstantOracle as COra
+from oracles.grover import FixedStringOracle as FSOra
 
 
 def parse_arguments():
@@ -32,32 +30,24 @@ def parse_arguments():
     return namespace
 
 
-def create_program(nqubits: int) -> Tuple[Program, QRegister]:
-    pr = Program()
-    qr = pr.qalloc(nqubits)
-    return pr, qr
-
-
 def main():
     qpu = PyLinalg()
     namespace = parse_arguments()
     print(namespace)
-    n = namespace.n
 
-    if namespace.bitstring == None:
-        s = bin(random.getrandbits(n))[2:].zfill(n)
-    else:
-        s = namespace.bitstring
-    print(f"Random string {s} ")
+    if not namespace.bitstring:
+        namespace.bitstring = bin(random.getrandbits(namespace.n))[2:].zfill(
+            namespace.n)
+    print(f"String {namespace.bitstring} ")
 
     algs_oracles = [
-        (DeutschJozsaAlgorithm, ConstantOracle(n), {}),
-        (DeutschJozsaAlgorithm, BalancedOracle(n), {}),
-        (BernsteinVaziraniAlgorithm, BitwiseProductOracle(n), {
-            "s": s
+        (DeutschJozsaAlgorithm, COra(namespace.n), {}),
+        (DeutschJozsaAlgorithm, BOra(namespace.n), {}),
+        (BernsteinVaziraniAlgorithm, BPOra(namespace.n), {
+            "s": namespace.bitstring
         }),
-        (GroverAlgorithm, FixedStringOracle(n), {
-            "s": s
+        (GroverAlgorithm, FSOra(namespace.n), {
+            "s": namespace.bitstring
         }),
     ]
 
@@ -65,9 +55,8 @@ def main():
         print(alg)
         print(oracle)
         print(kwargs)
-        pr, qr = create_program(n)
         oracle_rout = oracle.generate(**kwargs)
-        pr, meas_qbits = alg.generate_program(pr, qr, oracle_rout)
+        pr, meas_qbits = alg.generate_program(namespace.n, oracle_rout)
         cr = pr.to_circ()
         if namespace.display:
             display(cr)
