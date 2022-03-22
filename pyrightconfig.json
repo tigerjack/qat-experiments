@@ -1,0 +1,15 @@
+{
+   "pythonVersion" : "3.9",
+   "reportMissingTypeStubs" : false,
+   "reportUnknownArgumentType" : false,
+   "reportUnknownMemberType" : false,
+   "reportUnknownParameterType" : false,
+   "reportUnknownVariableType" : false,
+    "typeCheckingMode": "off",
+   "strict" : [
+      "."
+   ],
+   "useLibraryCodeForTypes" : true,
+   "venv" : "myqlm9",
+   "venvPath" : "/mnt/internal/LinuxData/pyenv/versions"
+}

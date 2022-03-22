@@ -1,5 +1,5 @@
 # from undo-tree package?
-*.~undo-tree 
+*.~undo-tree~
 # from gtags
 GPATH
 GTAGS
